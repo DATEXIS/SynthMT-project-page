@@ -29,7 +29,7 @@
                     <sup>3</sup><a href="https://www.mpiib-berlin.mpg.de/">Max Planck Institute for Infection
                         Biology</a>
                 </p>
-                <p style="font-size: 0.9em; margin-top: 5px;">* These authors contributed equally</p>
+                <p class="header-label" style="margin-top: 5px;">* These authors contributed equally</p>
             </div>
             <div class="links">
                 <a href="#" class="button">
@@ -51,7 +51,7 @@
                     </svg>
                     Code (GitHub)
                 </a>
-                <a href="#" class="button">
+                <a href="https://huggingface.co/datasets/HTW-KI-Werkstatt/SynthMT" class="button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         style="vertical-align: text-bottom; margin-right: 5px;">
@@ -65,198 +65,64 @@
         </div>
     </header>
 
-    <!-- <section class="interactive-examples">
+    <section class="interactive-benchmark">
         <div class="container">
-            <p class="teaser-text"><i>We introduce SCAM datasets to study and evaluate the robustness of multimodal
-                    foundation models against typographic attacks.</i></p>
-            <div class="explorer-container">
-                <div class="dataset-images">
-                    <div class="dataset-variant">
-                        <div class="variant-header-container">
-                            <h3>SCAM</h3>
-                            <p>Real-world Typographic Attack</p>
-                        </div>
-                        <div class="image-container">
-                            <img id="scam-image" src="" alt="SCAM dataset example">
-                        </div>
-                    </div>
-                    <div class="dataset-variant">
-                        <div class="variant-header-container">
-                            <h3>SynthSCAM</h3>
-                            <p>Synthetic Typographic Attack</p>
-                        </div>
-                        <div class="image-container">
-                            <img id="synthscam-image" src="" alt="SynthSCAM dataset example">
-                        </div>
-                    </div>
-                    <div class="dataset-variant">
-                        <div class="variant-header-container">
-                            <h3>NoSCAM</h3>
-                            <p>Removed Attack</p>
-                        </div>
-                        <div class="image-container">
-                            <img id="noscam-image" src="" alt="NoSCAM dataset example">
-                        </div>
-                    </div>
-                </div>
+            <p style="text-align: center; margin-bottom: 2rem; font-style: italic;">
+                We introduce the SynthMT dataset to study the readiness of automated microtubule analysis with
+                state-of-the-art foundation models.
+            </p>
 
-                <div class="flow-arrows left-arrows">
-                    <svg class="arrow-svg" viewBox="0 0 100 700" preserveAspectRatio="none">
-                        <path class="arrow-path top-arrow"
-                            d="M 0,60 C 30,60 70,70 90,140 L 100,120 M 90,140 L 70,130" />
-                        <path class="arrow-path middle-arrow"
-                            d="M 0,350 C 30,350 70,350 90,350 L 70,330 M 90,350 L 70,370" />
-                        <path class="arrow-path bottom-arrow"
-                            d="M 0,640 C 30,640 70,630 90,560 L 100,580 M 90,560 L 70,570" />
-                    </svg>
-                </div>
-
-                <div class="model-processor">
-                    <h3>Model</h3>
-                    <div class="mode-selector">
-                        <div class="mode-option">
-                            <input type="radio" id="vlm-mode" name="mode" value="vlm" checked>
-                            <label for="vlm-mode">VLM</label>
-                        </div>
-                        <div class="mode-option">
-                            <input type="radio" id="lvlm-mode" name="mode" value="lvlm">
-                            <label for="lvlm-mode">LVLM</label>
-                        </div>
-                    </div>
-                    <select id="model-selector">
-                    </select>
-                    <div class="model-info">
-                        <div class="model-property">
-                            <span id="model-params">-</span> params
-                        </div>
-                        <div class="model-property">
-                            <span id="model-image-size">-</span> px
-                        </div>
-                        <div class="model-property" id="model-prompt-container">
-                            <button class="prompt-arrow left-arrow" id="prev-prompt-button"
-                                aria-label="Previous prompt">⟨</button>
-                            <span id="model-prompt">-</span>
-                            <button class="prompt-arrow right-arrow" id="next-prompt-button"
-                                aria-label="Next prompt">⟩</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flow-arrows right-arrows">
-                    <svg class="arrow-svg" viewBox="0 0 100 700" preserveAspectRatio="none">
-                        <path class="arrow-path top-arrow" d="M 10,140 C 30,60 70,60 100,60 L 80,75 M 100,60 L 80,45" />
-                        <path class="arrow-path middle-arrow"
-                            d="M 10,350 C 30,350 70,350 100,350 L 80,330 M 100,350 L 80,370" />
-                        <path class="arrow-path bottom-arrow"
-                            d="M 10,560 C 30,640 70,640 100,640 L 80,620 M 100,640 L 80,660" />
-                    </svg>
-                </div>
-
-                <div class="similarity-results">
-                    <div class="results-container">
-                        <div class="result">
-                            <div class="score-container">
-                                <div class="progress-container">
-                                    <div class="label-container">
-                                        <span><span class="explorer-label-intro">object:</span> <span
-                                                id="scam-object-label">-</span></span>
-                                        <span id="scam-object-score" class="score-value">-</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div id="scam-object-bar" class="bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="progress-container">
-                                    <div class="label-container">
-                                        <span><span class="explorer-label-intro">attack:</span> <span
-                                                id="scam-attack-label">-</span></span>
-                                        <span id="scam-attack-score" class="score-value">-</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div id="scam-attack-bar" class="bar-fill"></div>
-                                    </div>
-                                </div>
+            <div class="benchmark-interface">
+                <!-- Left Column: Image Selector -->
+                <div class="column image-selector-column">
+                    <h3>Select Image</h3>
+                    <div class="framed-box image-selection-box">
+                        <div class="image-group synthetic-group">
+                            <span class="group-label synthetic-label">SynthMT</span>
+                            <div class="image-grid" id="synthetic-grid">
+                                <!-- Populated by JS -->
                             </div>
                         </div>
-
-                        <div class="result">
-                            <div class="score-container">
-                                <div class="progress-container">
-                                    <div class="label-container">
-                                        <span><span class="explorer-label-intro">object:</span> <span
-                                                id="synthscam-object-label">-</span></span>
-                                        <span id="synthscam-object-score" class="score-value">-</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div id="synthscam-object-bar" class="bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="progress-container">
-                                    <div class="label-container">
-                                        <span><span class="explorer-label-intro">attack:</span> <span
-                                                id="synthscam-attack-label">-</span></span>
-                                        <span id="synthscam-attack-score" class="score-value">-</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div id="synthscam-attack-bar" class="bar-fill"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="result">
-                            <div class="score-container">
-                                <div class="progress-container">
-                                    <div class="label-container">
-                                        <span><span class="explorer-label-intro">object:</span> <span
-                                                id="noscam-object-label">-</span></span>
-                                        <span id="noscam-object-score" class="score-value">-</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div id="noscam-object-bar" class="bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="progress-container">
-                                    <div class="label-container">
-                                        <span><span class="explorer-label-intro">attack:</span> <span
-                                                id="noscam-attack-label">-</span></span>
-                                        <span id="noscam-attack-score" class="score-value">-</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div id="noscam-attack-bar" class="bar-fill"></div>
-                                    </div>
-                                </div>
+                        <div class="image-group real-group">
+                            <span class="group-label real-label">Real</span>
+                            <div class="image-grid" id="real-grid">
+                                <!-- Populated by JS -->
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="navigation-controls">
-                <button id="prev-example" class="button nav-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        style="vertical-align: text-bottom; margin-right: 5px;">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    Prev.
-                </button>
-                <div class="example-counter">
-                    <span id="current-example-num">-</span> / <span id="total-examples">-</span>
+                <!-- Middle Column: Model Selector -->
+                <div class="column model-selector-column">
+                    <h3>Select Models</h3>
+                    <div class="model-columns-wrapper">
+                        <div class="model-list" id="model-list-left">
+                            <!-- Baseline + Microscopy models - Populated by JS -->
+                        </div>
+                        <div class="model-list" id="model-list-right">
+                            <!-- General Purpose models - Populated by JS -->
+                        </div>
+                    </div>
+                    <div class="hpo-disclaimer">
+                        <strong>HPO</strong> = Hyperparameter Optimization via random search using 10 synthetic images
+                        from SynthMT. Each model's parameters were tuned to maximize <a
+                            href="https://openaccess.thecvf.com/content_eccv_2018_workshops/w33/html/Liu_Densely_Connected_Stacked_U-network_for_Filament_Segmentation_in_Microscopy_Images_ECCVW_2018_paper.html"
+                            target="_blank" title="Skeleton IoU metric for filament segmentation">SKIoU</a>.
+                    </div>
                 </div>
-                <button id="next-example" class="button nav-button">
-                    Next
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        style="vertical-align: text-bottom; margin-left: 5px;">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                </button>
+
+                <!-- Right Column: Results -->
+                <div class="column results-column">
+                    <h3>Results</h3>
+                    <div class="framed-box results-box">
+                        <div class="results-grid" id="results-grid">
+                            <div class="placeholder-text">Select an image and models to view results</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section> -->
+    </section>
 
     <section class="abstract">
         <div class="container">
