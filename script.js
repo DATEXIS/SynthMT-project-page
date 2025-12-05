@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // State
     let state = {
         selectedImage: { type: 'synthetic', filename: 'synthetic_0.png' },
-        selectedModels: new Set(['FIESTA', 'SAM3Text']), // Default selection
+        selectedModels: ['FIESTA', 'SAM3Text'], // Array to preserve insertion order
         hpoEnabled: {} // Track HPO state per model folder, e.g., { 'SAM': true, 'FIESTA': false }
     };
 
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add models in this group
             group.models.forEach(model => {
                 const btn = document.createElement('div');
-                btn.className = `model-btn ${state.selectedModels.has(model.folder) ? 'active' : ''}`;
+                btn.className = `model-btn ${state.selectedModels.includes(model.folder) ? 'active' : ''}`;
 
                 // Left side: Model name container (flex: 1 to fill space)
                 const nameContainer = document.createElement('span');
@@ -269,10 +269,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle Model Click
     function handleModelClick(folder) {
-        if (state.selectedModels.has(folder)) {
-            state.selectedModels.delete(folder);
+        const index = state.selectedModels.indexOf(folder);
+        if (index !== -1) {
+            // Remove from array
+            state.selectedModels.splice(index, 1);
         } else {
-            state.selectedModels.add(folder);
+            // Add to end of array
+            state.selectedModels.push(folder);
         }
 
         // Update UI highlights
@@ -285,42 +288,108 @@ document.addEventListener('DOMContentLoaded', () => {
         return state.selectedImage.type === type && state.selectedImage.filename === filename;
     }
 
-    // Update Results Grid
+    // Update Results Grid - Smart diffing to avoid flicker
     function updateResults() {
-        resultsGrid.innerHTML = '';
-
-        if (state.selectedModels.size === 0) {
+        if (state.selectedModels.length === 0) {
             resultsGrid.innerHTML = '<div class="placeholder-text">Select at least one model to view results</div>';
             return;
         }
 
-        // Sort selected models to match the order in the config
-        const sortedSelectedModels = models.filter(m => state.selectedModels.has(m.folder));
+        // Remove placeholder if present
+        const placeholder = resultsGrid.querySelector('.placeholder-text');
+        if (placeholder) {
+            placeholder.remove();
+        }
+
+        // Get selected models in selection order (not config order)
+        const selectedModelsInOrder = state.selectedModels
+            .map(folder => models.find(m => m.folder === folder))
+            .filter(Boolean);
 
         // Set data-count attribute for CSS styling
-        resultsGrid.setAttribute('data-count', sortedSelectedModels.length);
+        resultsGrid.setAttribute('data-count', selectedModelsInOrder.length);
 
-        sortedSelectedModels.forEach(model => {
-            const item = document.createElement('div');
-            item.className = 'result-item';
-
-            const img = document.createElement('img');
-            // Check if HPO is enabled for this model
+        // Build a map of what should be displayed: key -> {model, hpo, src, label}
+        const desiredItems = [];
+        selectedModelsInOrder.forEach(model => {
             const hpoEnabled = state.hpoEnabled[model.folder] || false;
             const folderName = hpoEnabled ? `${model.folder}*` : model.folder;
-
-            // The raw images are .png, but the segmented images are .webp
             const filenameWebp = state.selectedImage.filename.replace('.png', '.webp');
-            img.src = `images/${state.selectedImage.type}/${folderName}/${filenameWebp}`;
-            img.alt = `${model.name} result`;
-            img.loading = 'lazy';
+            const src = `images/${state.selectedImage.type}/${folderName}/${filenameWebp}`;
+            const labelText = hpoEnabled ? `${model.name} + HPO` : model.name;
+            const key = `${model.folder}-${hpoEnabled ? 'hpo' : 'nohpo'}`;
+            desiredItems.push({ model, hpoEnabled, src, labelText, key });
+        });
 
-            const label = document.createElement('span');
-            label.textContent = hpoEnabled ? `${model.name} +HPO` : model.name;
+        // Build a map of current items in the DOM
+        const currentItemsByKey = new Map();
+        resultsGrid.querySelectorAll('.result-item').forEach(item => {
+            const key = item.dataset.key;
+            if (key) {
+                currentItemsByKey.set(key, item);
+            }
+        });
 
-            item.appendChild(img);
-            item.appendChild(label);
-            resultsGrid.appendChild(item);
+        // Set of keys we want to keep
+        const desiredKeys = new Set(desiredItems.map(d => d.key));
+
+        // Remove items that are no longer needed
+        currentItemsByKey.forEach((item, key) => {
+            if (!desiredKeys.has(key)) {
+                item.remove();
+                currentItemsByKey.delete(key);
+            }
+        });
+
+        // Now update/add items in order
+        let previousElement = null;
+
+        desiredItems.forEach(({ model, hpoEnabled, src, labelText, key }) => {
+            let item = currentItemsByKey.get(key);
+
+            if (item) {
+                // Item exists - update the image src if needed (for image change)
+                const img = item.querySelector('img');
+                const currentSrc = img.getAttribute('src');
+                if (currentSrc !== src) {
+                    img.src = src;
+                }
+                // Update label if needed
+                const label = item.querySelector('span');
+                if (label.textContent !== labelText) {
+                    label.textContent = labelText;
+                }
+            } else {
+                // Create new item
+                item = document.createElement('div');
+                item.className = 'result-item';
+                item.dataset.key = key;
+
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `${model.name} result`;
+                img.loading = 'lazy';
+
+                const label = document.createElement('span');
+                label.textContent = labelText;
+
+                item.appendChild(img);
+                item.appendChild(label);
+                currentItemsByKey.set(key, item);
+            }
+
+            // Ensure correct order: insert after previousElement (or at start)
+            if (previousElement) {
+                if (item.previousElementSibling !== previousElement) {
+                    previousElement.after(item);
+                }
+            } else {
+                if (item !== resultsGrid.firstElementChild) {
+                    resultsGrid.prepend(item);
+                }
+            }
+
+            previousElement = item;
         });
     }
 

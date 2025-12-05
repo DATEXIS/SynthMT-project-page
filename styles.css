@@ -879,6 +879,13 @@ footer {
     grid-template-columns: 1fr 1fr;
 }
 
+/* Disable hover zoom when only 1 image - it's already large enough */
+.results-grid[data-count="1"] .result-item img:hover {
+    transform: none;
+    box-shadow: none;
+    cursor: default;
+}
+
 .results-grid[data-count="3"] {
     grid-template-columns: 1fr 1fr;
 }
