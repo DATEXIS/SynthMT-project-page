@@ -75,7 +75,8 @@ a:hover {
 }
 
 /* Monospace code/model names */
-code, .mono {
+code,
+.mono {
     font-family: 'Roboto Mono', 'SF Mono', 'Consolas', 'Monaco', monospace;
     font-size: 0.95em;
     letter-spacing: -0.3px;
@@ -1289,7 +1290,7 @@ footer {
     .benchmark-layout {
         flex-direction: column;
     }
-    
+
     .benchmark-explanation {
         max-width: 100%;
     }
@@ -1634,6 +1635,7 @@ footer {
 
 /* Touch device detection - disable hover effects */
 @media (hover: none) and (pointer: coarse) {
+
     .image-thumb:hover,
     .image-thumb.active:hover {
         transform: none;
