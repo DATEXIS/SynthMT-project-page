@@ -20,15 +20,15 @@
                 <p>
                     <a href="mailto:mario.koddenbrock@htw-berlin.de">Mario Koddenbrock</a><sup>*,1</sup>,
                     <a href="mailto:justus.westerhoff@bht-berlin.de">Justus Westerhoff</a><sup>*,2</sup>,
-                    <span>Dominik Fachet</span><sup>3</sup>,
-                    <span>Simone Reber</span><sup>3</sup>,
-                    <span>Felix Gers</span><sup>2</sup>,
+                    <a href="mailto:fachet@mpiib-berlin.mpg.de">Dominik Fachet</a><sup>3</sup>,
+                    <a href="mailto:reber@mpiib-berlin.mpg.de">Simone Reber</a><sup>3</sup>,
+                    <a href="mailto:felixalexander.gers@bht-berlin.de">Felix Gers</a><sup>2</sup>,
                     <a href="mailto:erik.rodner@htw-berlin.de">Erik Rodner</a><sup>1</sup>
                 </p>
                 <p class="header-label">Affiliations</p>
                 <p class="affiliations">
                     <sup>1</sup><a href="https://kiwerkstatt.f2.htw-berlin.de/">KI Werkstatt, HTW Berlin</a>,
-                    <sup>2</sup><a href="https://www.bht-berlin.de/">DATEXIS, BHT Berlin</a>,
+                    <sup>2</sup><a href="https://prof.bht-berlin.de/loeser">DATEXIS, BHT Berlin</a>,
                     <sup>3</sup><a href="https://www.mpiib-berlin.mpg.de/">Max Planck Institute for Infection
                         Biology</a>
                 </p>
@@ -129,49 +129,22 @@
         </div>
     </section>
 
-    <section class="abstract">
+    <section class="key-contributions">
         <div class="container">
-            <h2>Abstract</h2>
-            <p>
-                Microtubules (MTs) occur in large numbers, and domain experts spend many hours manually segmenting these
-                filamentous structures.
-                The readiness of current state-of-the-art foundation models for this task cannot be assessed
-                systematically because large-scale labeled datasets are missing.
-                We address this gap by presenting SynthMT, a synthetic benchmark specifically designed to evaluate
-                whether current segmentation models are ready for automated MT analysis.
-                Our synthetic data generation pipeline produces structurally faithful and labeled images from unlabeled
-                real-world data.
-                Applied to exemplar IRM frames, this pipeline yields the SynthMT dataset.
-                We judge its perceptual realism through expert rating across multiple quality dimensions.
-                Using the accompanying evaluation framework, we systematically test nine classical and foundation models
-                in both zero-shot and few-shot settings with HPO.
-                Across both settings, classical and current foundation models still struggle to achieve the accuracy
-                required for downstream biological analysis on, to humans, visually simple <i>in vitro</i> MT IRM
-                images.
-                However, a notable exception is the recently introduced SAM3 model.
-                After the HPO with only ten random images from SynthMT, its text-prompt version SAM3Text achieves
-                near-perfect and in some cases super-human performance on unseen real data.
-                This finding shows that fully automated MT segmentation has arrived, but also that such performance
-                critically depends on (synthetic) data to guide effective model configuration.
-            </p>
-
-            <h3>Key Contributions</h3>
+            <h2>Key Contributions</h2>
             <ul>
-                <li><strong>A label-free generation pipeline:</strong> Given only unlabeled real MT images (IRM or TIRF)
-                    from a target domain (e.g., specific microscope), our publicly available pipeline adapts to these
-                    and generates realistic synthetic images alongside ground-truth masks, enabling adaptation to new
-                    labs or conditions without manual annotation.</li>
-                <li><strong>Synthetic benchmark dataset (SynthMT):</strong> We apply this pipeline to unlabeled real IRM
-                    exemplar frames to construct and release the SynthMT dataset together with instance masks for seeds
-                    and MTs. Its biological plausibility is assessed through expert annotation.</li>
-                <li><strong>Comprehensive evaluation and tooling:</strong> We perform a reproducible benchmark of
-                    classical and state-of-the-art segmentation models on SynthMT, including zero-shot and few-shot
-                    adaptation (HPO-based) experiments, establishing quantitative baselines.</li>
-                <li><strong>Enabling fully automatic segmentation:</strong> Besides the many limitations that our
-                    benchmark reveals, we demonstrate that the newly released foundation model SAM3 reaches
-                    near-perfect, in some cases human-grade, performance when guided by simple prompt design and
-                    parameter optimization derived solely from our synthetic images. This establishes a practical route
-                    toward fully automated MT image segmentation for large-scale experiments.</li>
+                <li>🔧 <strong>Zero-annotation pipeline:</strong> Got unlabeled MT images? Our open-source pipeline
+                    turns them into realistic synthetic training data with perfect ground-truth masks — no manual
+                    labeling needed!</li>
+                <li>📦 <strong>Ready-to-use benchmark (<code>SynthMT</code>):</strong> We release <code>SynthMT</code>,
+                    a synthetic dataset with instance masks for MTs, judged by domain experts for
+                    biological plausibility.</li>
+                <li>📊 <strong>Honest model comparison:</strong> We benchmark 9 classical and foundation models on
+                    <code>SynthMT</code> — zero-shot and with HPO — so you know what actually works (spoiler: most
+                    don't).</li>
+                <li>🚀 <strong>Finally, it works!</strong> <code>SAM3</code> + simple HPO on just 10 synthetic images
+                    from our pipeline → near-perfect, sometimes <em>superhuman</em> segmentation on real data. Fully
+                    automated MT analysis is here! ⭐</li>
             </ul>
         </div>
     </section>
@@ -179,327 +152,179 @@
     <section class="benchmark">
         <div class="container">
             <h2>Benchmark Results</h2>
-            <p>
-                Comprehensive benchmark of segmentation models on the SynthMT synthetic dataset signals unprecedented
-                performance of the new SAM3 model.
-                We report (i) segmentation metrics SKIoU, AP (mean over SKIoU thresholds), and F1 of SKIoU at 0.50 and
-                0.75;
-                (ii) downstream biological metrics obtained by aggregating all counts, lengths, and curvatures across
-                all images and reporting the absolute difference between predicted and ground-truth means ("Diff"),
-                together with the KL divergence ("KL") between their distributions (lower is better for all);
-                and (iii) computational throughput ("Images/sec."; sequential, unbatched inference on a single NVIDIA
-                A100 GPU; FIESTA executed on a MacBook M3 Pro).
-                All models are evaluated zero-shot using their default parameters.
-                Rows marked with "+ HPO" show performance after HPO with SKIoU on 10 randomly sampled synthetic SynthMT
-                images, illustrating few-shot adaptation potential.
-                SAM-family models are run in Automatic Instance Segmentation (AIS) mode; SAM3Text uses its text prompt
-                mode (default prompt: "thin line").
-                The best default and HPO model in every column are listed in <strong>bold</strong>.
-            </p>
 
-            <div class="benchmark-table-container">
-                <table class="benchmark-table">
-                    <thead>
-                        <tr>
-                            <th rowspan="3">Model</th>
-                            <th rowspan="3">Images/sec. &uarr;</th>
-                            <th colspan="4">Segmentation</th>
-                            <th colspan="5">Downstream</th>
-                        </tr>
-                        <tr>
-                            <th rowspan="2">SKIoU &uarr;</th>
-                            <th rowspan="2">AP &uarr;</th>
-                            <th colspan="2">F1 &uarr;</th>
-                            <th rowspan="2">Count Diff &darr;</th>
-                            <th colspan="2">Length &darr;</th>
-                            <th colspan="2">Curvature &darr;</th>
-                        </tr>
-                        <tr>
-                            <th>@.50</th>
-                            <th>@.75</th>
-                            <th>Diff (&mu;m)</th>
-                            <th>KL</th>
-                            <th>Diff (&mu;m<sup>-1</sup>)</th>
-                            <th>KL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Baseline -->
-                        <tr class="group-header">
-                            <td colspan="11">Baseline</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">FIESTA</td>
-                            <td>0.21</td>
-                            <td>0.12</td>
-                            <td>0.12</td>
-                            <td>0.22</td>
-                            <td>0.18</td>
-                            <td>88.35</td>
-                            <td>102.86</td>
-                            <td>5.03</td>
-                            <td>0.19</td>
-                            <td>1.01</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td>0.16</td>
-                            <td>0.24</td>
-                            <td>0.25</td>
-                            <td>0.39</td>
-                            <td>0.30</td>
-                            <td>27.52</td>
-                            <td>87.36</td>
-                            <td>3.74</td>
-                            <td>0.17</td>
-                            <td>0.71</td>
-                        </tr>
+            <div class="benchmark-layout">
+                <div class="benchmark-explanation">
+                    <h3>📊 What we measure</h3>
+                    <p><strong>SKIoU</strong> (Skeleton IoU) measures how well predicted segmentations match
+                        ground-truth microtubule shapes — the core metric for filament segmentation.</p>
+                    <p><strong>Length KL</strong> and <strong>Curvature KL</strong> capture how well the model preserves
+                        biologically meaningful properties. Lower = predictions match real MT distributions better.</p>
 
-                        <!-- Foundation Models for Microscopy -->
-                        <tr class="group-header">
-                            <td colspan="11">Foundation Models for Microscopy</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">StarDist</td>
-                            <td>5.04</td>
-                            <td>0.01</td>
-                            <td>0.03</td>
-                            <td>0.00</td>
-                            <td>0.00</td>
-                            <td>9.44</td>
-                            <td>28.85</td>
-                            <td>0.69</td>
-                            <td>0.08</td>
-                            <td>0.19</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td class="best-score">8.85</td>
-                            <td>0.30</td>
-                            <td>0.34</td>
-                            <td>0.35</td>
-                            <td>0.15</td>
-                            <td>8.60</td>
-                            <td>96.22</td>
-                            <td>1.94</td>
-                            <td>0.07</td>
-                            <td>0.19</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">TARDIS</td>
-                            <td>0.32</td>
-                            <td>0.45</td>
-                            <td>0.48</td>
-                            <td>0.59</td>
-                            <td>0.45</td>
-                            <td>5.85</td>
-                            <td>50.73</td>
-                            <td>0.55</td>
-                            <td>0.02</td>
-                            <td class="best-score">0.02</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td>0.31</td>
-                            <td>0.48</td>
-                            <td>0.55</td>
-                            <td>0.57</td>
-                            <td>0.41</td>
-                            <td>1.04</td>
-                            <td>44.97</td>
-                            <td>0.41</td>
-                            <td class="best-score">0.01</td>
-                            <td>0.03</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">&mu;SAM</td>
-                            <td class="best-score">7.41</td>
-                            <td>0.01</td>
-                            <td>0.06</td>
-                            <td>0.01</td>
-                            <td>0.00</td>
-                            <td>10.99</td>
-                            <td>67.41</td>
-                            <td>0.96</td>
-                            <td>0.03</td>
-                            <td>0.16</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td>7.17</td>
-                            <td>0.40</td>
-                            <td>0.47</td>
-                            <td>0.45</td>
-                            <td>0.39</td>
-                            <td>3.46</td>
-                            <td>65.55</td>
-                            <td>2.04</td>
-                            <td>0.03</td>
-                            <td>0.26</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">CellSAM</td>
-                            <td>2.58</td>
-                            <td>0.49</td>
-                            <td>0.77</td>
-                            <td>0.59</td>
-                            <td>0.52</td>
-                            <td>4.16</td>
-                            <td>33.88</td>
-                            <td>0.19</td>
-                            <td>0.04</td>
-                            <td class="best-score">0.02</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td>2.50</td>
-                            <td>0.56</td>
-                            <td>0.68</td>
-                            <td>0.65</td>
-                            <td>0.56</td>
-                            <td>0.42</td>
-                            <td>36.62</td>
-                            <td>0.21</td>
-                            <td>0.06</td>
-                            <td>0.04</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">Cellpose-SAM</td>
-                            <td>2.64</td>
-                            <td>0.19</td>
-                            <td>0.56</td>
-                            <td>0.28</td>
-                            <td>0.27</td>
-                            <td>9.03</td>
-                            <td class="best-score">9.75</td>
-                            <td>0.13</td>
-                            <td class="best-score">0.00</td>
-                            <td class="best-score">0.02</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td>2.59</td>
-                            <td>0.62</td>
-                            <td>0.74</td>
-                            <td>0.73</td>
-                            <td>0.62</td>
-                            <td>1.07</td>
-                            <td>26.94</td>
-                            <td>0.12</td>
-                            <td class="best-score">0.01</td>
-                            <td class="best-score">0.01</td>
-                        </tr>
+                    <h3>🔬 Key takeaways</h3>
+                    <ul>
+                        <li>Most models struggle out-of-the-box (zero-shot)</li>
+                        <li>HPO on just 10 synthetic images helps dramatically</li>
+                        <li><code>SAM3Text</code> + HPO achieves <strong>0.89 SKIoU</strong> — near-perfect!</li>
+                        <li>It also nails downstream metrics (Length KL: 1.01)</li>
+                    </ul>
 
-                        <!-- General Purpose Foundation Models -->
-                        <tr class="group-header">
-                            <td colspan="11">General Purpose Foundation Models</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">SAM</td>
-                            <td>0.72</td>
-                            <td>0.37</td>
-                            <td>0.46</td>
-                            <td>0.45</td>
-                            <td>0.44</td>
-                            <td>9.18</td>
-                            <td>84.93</td>
-                            <td>3.90</td>
-                            <td>0.07</td>
-                            <td>0.73</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td>0.52</td>
-                            <td>0.16</td>
-                            <td>0.16</td>
-                            <td>0.25</td>
-                            <td>0.24</td>
-                            <td>63.62</td>
-                            <td>102.05</td>
-                            <td>5.45</td>
-                            <td>0.10</td>
-                            <td>0.93</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">SAM2</td>
-                            <td>0.97</td>
-                            <td>0.01</td>
-                            <td>0.04</td>
-                            <td>0.01</td>
-                            <td>0.01</td>
-                            <td>11.23</td>
-                            <td>89.53</td>
-                            <td>1.77</td>
-                            <td>0.18</td>
-                            <td>0.28</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td>0.63</td>
-                            <td>0.66</td>
-                            <td>0.73</td>
-                            <td>0.74</td>
-                            <td>0.72</td>
-                            <td class="best-score">0.39</td>
-                            <td>13.11</td>
-                            <td>0.04</td>
-                            <td>0.03</td>
-                            <td>0.02</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">SAM3</td>
-                            <td>1.00</td>
-                            <td>0.00</td>
-                            <td>0.00</td>
-                            <td>0.00</td>
-                            <td>0.00</td>
-                            <td>11.28</td>
-                            <td>93.47</td>
-                            <td>2.88</td>
-                            <td>0.10</td>
-                            <td>0.62</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td>0.79</td>
-                            <td>0.28</td>
-                            <td>0.29</td>
-                            <td>0.33</td>
-                            <td>0.33</td>
-                            <td>10.96</td>
-                            <td>75.60</td>
-                            <td>3.84</td>
-                            <td class="best-score">0.01</td>
-                            <td>0.57</td>
-                        </tr>
-                        <tr>
-                            <td class="model-name">SAM3Text</td>
-                            <td>4.24</td>
-                            <td class="best-score">0.80</td>
-                            <td class="best-score">0.87</td>
-                            <td class="best-score">0.87</td>
-                            <td class="best-score">0.85</td>
-                            <td class="best-score">0.75</td>
-                            <td>14.09</td>
-                            <td class="best-score">0.07</td>
-                            <td>0.10</td>
-                            <td>0.06</td>
-                        </tr>
-                        <tr class="hpo-row">
-                            <td class="model-name">&nbsp;&nbsp;+ HPO</td>
-                            <td>3.91</td>
-                            <td class="best-score">0.89</td>
-                            <td class="best-score">0.95</td>
-                            <td class="best-score">0.95</td>
-                            <td class="best-score">0.93</td>
-                            <td>0.49</td>
-                            <td class="best-score">1.01</td>
-                            <td class="best-score">0.02</td>
-                            <td>0.10</td>
-                            <td>0.07</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <p class="benchmark-note">
+                        💡 <em>Full results with all metrics available in the paper.</em>
+                    </p>
+                </div>
+
+                <div class="benchmark-table-container">
+                    <table class="benchmark-table benchmark-table-compact">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>SKIoU ↑</th>
+                                <th>Length KL ↓</th>
+                                <th>Curvature KL ↓</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="group-header">
+                                <td colspan="4">Baseline</td>
+                            </tr>
+                            <tr>
+                                <td class="model-name"><code>FIESTA</code></td>
+                                <td>0.12</td>
+                                <td>5.03</td>
+                                <td>1.01</td>
+                            </tr>
+                            <tr class="hpo-row">
+                                <td class="model-name"><code>FIESTA</code> + HPO</td>
+                                <td>0.24</td>
+                                <td>3.74</td>
+                                <td>0.71</td>
+                            </tr>
+
+                            <tr class="group-header">
+                                <td colspan="4">Microscopy Foundation Models</td>
+                            </tr>
+                            <tr>
+                                <td class="model-name"><code>TARDIS</code></td>
+                                <td>0.45</td>
+                                <td>0.55</td>
+                                <td class="best-score">0.02</td>
+                            </tr>
+                            <tr>
+                                <td class="model-name"><code>CellSAM</code></td>
+                                <td>0.49</td>
+                                <td>0.19</td>
+                                <td class="best-score">0.02</td>
+                            </tr>
+                            <tr class="hpo-row">
+                                <td class="model-name"><code>Cellpose-SAM</code> + HPO</td>
+                                <td>0.62</td>
+                                <td>0.12</td>
+                                <td class="best-score">0.01</td>
+                            </tr>
+
+                            <tr class="group-header">
+                                <td colspan="4">General Purpose Foundation Models</td>
+                            </tr>
+                            <tr>
+                                <td class="model-name"><code>SAM</code></td>
+                                <td>0.37</td>
+                                <td>3.90</td>
+                                <td>0.73</td>
+                            </tr>
+                            <tr class="hpo-row">
+                                <td class="model-name"><code>SAM2</code> + HPO</td>
+                                <td>0.66</td>
+                                <td>0.04</td>
+                                <td>0.02</td>
+                            </tr>
+                            <tr>
+                                <td class="model-name"><code>SAM3Text</code></td>
+                                <td class="best-score">0.80</td>
+                                <td>0.07</td>
+                                <td>0.06</td>
+                            </tr>
+                            <tr class="hpo-row winner-row">
+                                <td class="model-name"><code>SAM3Text</code> + HPO 🏆</td>
+                                <td class="best-score">0.89</td>
+                                <td class="best-score">0.02</td>
+                                <td>0.07</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pipeline">
+        <div class="container">
+            <h2>Synthetic Generation Pipeline</h2>
+            <p class="pipeline-subtitle">From structural masks to photorealistic microscopy images in 5 steps</p>
+            
+            <div class="pipeline-stages">
+                <div class="pipeline-stage">
+                    <div class="stage-image">
+                        <img src="media/image_pipeline/14_final_mt_mask.png" alt="MT mask generation">
+                    </div>
+                    <div class="stage-label">
+                        <span class="stage-number">1</span>
+                        <span class="stage-title">Structural Generation</span>
+                    </div>
+                    <p class="stage-description">Generate MT masks with realistic geometry</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-image">
+                        <img src="media/image_pipeline/02_after_drawing_mts.png" alt="Physical rendering">
+                    </div>
+                    <div class="stage-label">
+                        <span class="stage-number">2.1</span>
+                        <span class="stage-title">Physical Rendering</span>
+                    </div>
+                    <p class="stage-description">Apply optical system simulation</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-image">
+                        <img src="media/image_pipeline/05_after_random_spots.png" alt="Artifact simulation">
+                    </div>
+                    <div class="stage-label">
+                        <span class="stage-number">2.2</span>
+                        <span class="stage-title">Artifact Simulation</span>
+                    </div>
+                    <p class="stage-description">Add realistic imaging artifacts</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-image">
+                        <img src="media/image_pipeline/09_after_gaussian_noise.png" alt="Noise addition">
+                    </div>
+                    <div class="stage-label">
+                        <span class="stage-number">2.3</span>
+                        <span class="stage-title">Noise Addition</span>
+                    </div>
+                    <p class="stage-description">Inject sensor and shot noise</p>
+                </div>
+
+                <div class="pipeline-arrow">→</div>
+
+                <div class="pipeline-stage">
+                    <div class="stage-image">
+                        <img src="media/image_pipeline/13_final_frame.png" alt="Final output">
+                    </div>
+                    <div class="stage-label">
+                        <span class="stage-number">2.4</span>
+                        <span class="stage-title">Global Distortions</span>
+                    </div>
+                    <p class="stage-description">Apply intensity and contrast variations</p>
+                </div>
             </div>
         </div>
     </section>
@@ -647,6 +472,36 @@
         </div>
     </section> -->
 
+    <section class="abstract">
+        <div class="container">
+            <h2>Abstract</h2>
+            <p>
+                Microtubules (MTs) occur in large numbers, and domain experts spend many hours manually segmenting these
+                filamentous structures.
+                The readiness of current state-of-the-art foundation models for this task cannot be assessed
+                systematically because large-scale labeled datasets are missing.
+                We address this gap by presenting <code>SynthMT</code>, a synthetic benchmark specifically designed to
+                evaluate
+                whether current segmentation models are ready for automated MT analysis.
+                Our synthetic data generation pipeline produces structurally faithful and labeled images from unlabeled
+                real-world data.
+                Applied to exemplar IRM frames, this pipeline yields the <code>SynthMT</code> dataset.
+                We judge its perceptual realism through expert rating across multiple quality dimensions.
+                Using the accompanying evaluation framework, we systematically test nine classical and foundation models
+                in both zero-shot and few-shot settings with HPO.
+                Across both settings, classical and current foundation models still struggle to achieve the accuracy
+                required for downstream biological analysis on, to humans, visually simple <i>in vitro</i> MT IRM
+                images.
+                However, a notable exception is the recently introduced <code>SAM3</code> model.
+                After the HPO with only ten random images from <code>SynthMT</code>, its text-prompt version
+                <code>SAM3Text</code> achieves
+                near-perfect and in some cases super-human performance on unseen real data.
+                This finding shows that fully automated MT segmentation has arrived, but also that such performance
+                critically depends on (synthetic) data to guide effective model configuration.
+            </p>
+        </div>
+    </section>
+
     <section class="resources">
         <div class="container">
             <h2>Resources</h2>
@@ -719,9 +574,17 @@
 
     <section class="acknowledgement">
         <div class="container">
-            <p style="font-size: 0.9em; color: #666;">
+            <p style="font-size: 0.9em; color: #666; text-align: right;">
                 We would like to thank the authors of the <a href="https://github.com/Bliss-e-V/SCAM-project-page">SCAM
                     project page</a> for their template.
+            </p>
+        </div>
+    </section>
+
+    <section class="funding">
+        <div class="container">
+            <p style="font-size: 0.85em; color: #666; text-align: center;">
+                This work was funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) – FIP-12 – Project-ID 528483508
             </p>
         </div>
     </section>
