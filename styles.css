@@ -567,15 +567,69 @@ img {
     background-color: #666666;
 }
 
-/* Acknowledgement & Funding */
-.acknowledgement,
-.funding {
-    padding: 15px 0;
-    background-color: var(--background-alt);
+/* Logos Section */
+.logos {
+    padding: 30px 0;
+    background-color: var(--background);
 }
 
-.funding {
-    padding-bottom: 25px;
+.logo-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.logo-row a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 220px;
+    height: 110px;
+    padding: 18px;
+    background-color: var(--background-alt);
+    border-radius: 8px;
+    transition: opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.logo-row a:hover {
+    opacity: 0.8;
+    box-shadow: var(--box-shadow);
+}
+
+.logo-row img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Acknowledgement & Funding */
+.acknowledgement {
+    padding: 20px 0 30px 0;
+    background-color: var(--background-alt);
+    text-align: center;
+}
+
+.acknowledgement p {
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.acknowledgement p:last-child {
+    margin-bottom: 0;
+}
+
+.ack-funding {
+    font-size: 0.85em !important;
+}
+
+.ack-template {
+    font-size: 0.8em !important;
+    color: #888 !important;
 }
 
 /* Footer */
