@@ -92,13 +92,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const models = modelGroups.flatMap(group => group.models);
 
     const images = {
-        synthetic: Array.from({ length: 6 }, (_, i) => `synthetic_${i}.png`),
-        real: Array.from({ length: 6 }, (_, i) => `real_${i}.png`)
+        synthetic: Array.from({ length: 6 }, (_, i) => `synthetic_${i}.webp`),
+        real: Array.from({ length: 6 }, (_, i) => `real_${i}.webp`)
     };
 
     // State
     let state = {
-        selectedImage: { type: 'synthetic', filename: 'synthetic_0.png' },
+        selectedImage: { type: 'synthetic', filename: 'synthetic_0.webp' },
         selectedModels: ['FIESTA', 'SAM3Text'], // Array to preserve insertion order
         hpoEnabled: {} // Track HPO state per model folder, e.g., { 'SAM': true, 'FIESTA': false }
     };
@@ -314,11 +314,15 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedModelsInOrder.forEach(model => {
             const hpoEnabled = state.hpoEnabled[model.folder] || false;
             const folderName = hpoEnabled ? `${model.folder}*` : model.folder;
-            const filenameWebp = state.selectedImage.filename.replace('.png', '.webp');
-            const src = `images/${state.selectedImage.type}/${folderName}/${filenameWebp}`;
+            const filename = state.selectedImage.filename;
+
+            // Use thumbnails initially, full res on demand
+            const fullSrc = `images/${state.selectedImage.type}/${folderName}/${filename}`;
+            const thumbSrc = `images/${state.selectedImage.type}/${folderName}/thumbnails/${filename}`;
+
             const labelText = hpoEnabled ? `${model.name} + HPO` : model.name;
             const key = `${model.folder}-${hpoEnabled ? 'hpo' : 'nohpo'}`;
-            desiredItems.push({ model, hpoEnabled, src, labelText, key });
+            desiredItems.push({ model, hpoEnabled, fullSrc, thumbSrc, labelText, key });
         });
 
         // Build a map of current items in the DOM
@@ -344,21 +348,29 @@ document.addEventListener('DOMContentLoaded', () => {
         // Now update/add items in order
         let previousElement = null;
 
-        desiredItems.forEach(({ model, hpoEnabled, src, labelText, key }) => {
+        desiredItems.forEach(({ model, hpoEnabled, fullSrc, thumbSrc, labelText, key }) => {
             let item = currentItemsByKey.get(key);
 
             if (item) {
                 // Item exists - update the image src if needed (for image change)
                 const img = item.querySelector('img');
-                const currentSrc = img.getAttribute('src');
-                if (currentSrc !== src) {
-                    img.src = src;
+
+                // Check if we need to update the image (if the underlying model/image changed)
+                if (img.dataset.thumbSrc !== thumbSrc) {
+                    img.src = thumbSrc;
+                    img.dataset.thumbSrc = thumbSrc;
+                    img.dataset.fullSrc = fullSrc;
+                    img.dataset.loaded = 'false'; // Reset loaded state
                 }
+
                 // Update label if needed
                 const label = item.querySelector('span');
                 if (label.textContent !== labelText) {
                     label.textContent = labelText;
                 }
+
+                // Update click handler (Removed as per request)
+                // img.onclick = () => openLightbox(fullSrc, labelText);
             } else {
                 // Create new item
                 item = document.createElement('div');
@@ -366,9 +378,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.dataset.key = key;
 
                 const img = document.createElement('img');
-                img.src = src;
+                img.src = thumbSrc;
+                img.dataset.thumbSrc = thumbSrc;
+                img.dataset.fullSrc = fullSrc;
+                img.dataset.loaded = 'false';
                 img.alt = `${model.name} result`;
                 img.loading = 'lazy';
+
+                // Hover: Load full res
+                img.addEventListener('mouseenter', () => {
+                    if (img.dataset.loaded === 'false') {
+                        const highRes = new Image();
+                        highRes.onload = () => {
+                            img.src = img.dataset.fullSrc;
+                            img.dataset.loaded = 'true';
+                        };
+                        highRes.src = img.dataset.fullSrc;
+                    }
+                });
+
+                // Click: Open Lightbox (Removed as per request)
+                // img.onclick = () => openLightbox(fullSrc, labelText);
 
                 const label = document.createElement('span');
                 label.textContent = labelText;
@@ -390,6 +420,45 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             previousElement = item;
+        });
+    }
+
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxClose = document.querySelector('.lightbox-close');
+
+    function openLightbox(src, caption) {
+        if (lightbox && lightboxImg && lightboxCaption) {
+            lightbox.style.display = "block";
+            lightboxImg.src = src;
+            lightboxCaption.textContent = caption;
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+    }
+
+    if (lightboxClose) {
+        lightboxClose.onclick = () => {
+            lightbox.style.display = "none";
+            document.body.style.overflow = '';
+        };
+    }
+
+    if (lightbox) {
+        lightbox.onclick = (e) => {
+            if (e.target === lightbox) {
+                lightbox.style.display = "none";
+                document.body.style.overflow = '';
+            }
+        };
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.style.display === "block") {
+                lightbox.style.display = "none";
+                document.body.style.overflow = '';
+            }
         });
     }
 

@@ -42,16 +42,49 @@ body {
     background-color: var(--background);
 }
 
+/* Work in Progress Banner */
+.wip-banner {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffe8a0 100%);
+    border-bottom: 3px solid #ff9800;
+    padding: 16px 0;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.wip-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    max-width: 1500px;
+    margin: 0 auto;
+    width: 95%;
+    padding: 0 20px;
+}
+
+.wip-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.wip-text {
+    font-size: 14px;
+    color: #856404;
+    text-align: center;
+    font-weight: 500;
+}
+
 .container {
     width: 95%;
-    max-width: 1500px;
+    max-width: 1800px;
     margin: 0 auto;
     padding: 20px;
 }
 
 /* Typography */
 h1,
-h2,
 h3,
 h4,
 h5,
@@ -59,6 +92,21 @@ h6 {
     margin-bottom: 1rem;
     line-height: 1.3;
     text-align: center;
+}
+
+h2 {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 0.5rem 2rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(172, 55, 229, 0.3);
+    margin-bottom: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 p {
@@ -608,36 +656,30 @@ img {
 
 /* Acknowledgement & Funding */
 .acknowledgement {
-    padding: 20px 0 30px 0;
-    background-color: var(--background-alt);
+    padding: 30px 0;
+    background-color: var(--background);
     text-align: center;
-}
-
-.acknowledgement p {
-    font-size: 0.85em;
-    color: #666;
-    margin-bottom: 0.5rem;
-}
-
-.acknowledgement p:last-child {
-    margin-bottom: 0;
+    font-size: 0.9rem;
+    color: var(--text-light);
 }
 
 .ack-funding {
-    font-size: 0.85em !important;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
 }
 
 .ack-template {
-    font-size: 0.8em !important;
-    color: #888 !important;
+    font-style: italic;
 }
 
 /* Footer */
 footer {
-    padding: 30px 0;
+    padding: 20px 0;
+    background-color: var(--background-alt);
     text-align: center;
-    background-color: var(--background);
     color: var(--text-light);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border);
 }
 
 /* Interactive Examples Section */
@@ -1288,7 +1330,7 @@ footer {
 
 .benchmark-table-compact th,
 .benchmark-table-compact td {
-    padding: 0.5rem 0.75rem;
+    padding: 0.3rem 0.4rem;
 }
 
 .benchmark-table-compact .model-name {
@@ -1297,7 +1339,7 @@ footer {
 
 .benchmark-table th,
 .benchmark-table td {
-    padding: 0.75rem;
+    padding: 0.4rem;
     text-align: center;
     border-bottom: 1px solid var(--border);
 }
@@ -1336,10 +1378,6 @@ footer {
     background-color: rgba(255, 215, 0, 0.15);
 }
 
-.benchmark-table .winner-row td {
-    font-weight: 600;
-}
-
 @media (max-width: 900px) {
     .benchmark-layout {
         flex-direction: column;
@@ -1362,6 +1400,131 @@ footer {
     margin-bottom: 1rem;
     font-style: italic;
     color: var(--text-light);
+}
+
+/* Benchmark Table Styles */
+.table-container {
+    overflow-x: auto;
+    margin: 20px 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+.benchmark-table {
+    width: auto;
+    margin: 0 auto;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    background-color: white;
+    /* min-width: 800px; */
+}
+
+.benchmark-table th,
+.benchmark-table td {
+    padding: 6px 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(172, 55, 229, 0.1);
+}
+
+.benchmark-table th {
+    background-color: rgba(172, 55, 229, 0.15);
+    font-weight: 600;
+    color: var(--primary-dark);
+    border-bottom: 2px solid var(--primary);
+}
+
+.benchmark-table th[rowspan="2"] {
+    vertical-align: middle;
+    border-right: 1px solid #eee;
+}
+
+.benchmark-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+    border-right: 1px solid #eee;
+    padding-left: 15px;
+}
+
+.benchmark-table .group-header td {
+    background-color: #eef2f7;
+    color: #2c3e50;
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.benchmark-table .hpo-row td {
+    background-color: #fafafa;
+    color: #555;
+}
+
+.benchmark-table .hpo-row td:first-child {
+    padding-left: 25px;
+    font-style: italic;
+    color: #666;
+}
+
+.benchmark-table tr:hover td {
+    background-color: #f0f7ff;
+}
+
+.table-caption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Responsive adjustments for table */
+@media (max-width: 768px) {
+    .benchmark-table {
+        font-size: 0.8rem;
+    }
+
+    .benchmark-table th,
+    .benchmark-table td {
+        padding: 6px 8px;
+    }
+}
+
+/* Inter-annotator row style */
+.benchmark-table .inter-annotator-row td {
+    background-color: #e8f5e9;
+    /* Light green */
+    color: #2e7d32;
+    font-weight: 500;
+}
+
+.benchmark-table .inter-annotator-row td:first-child {
+    font-style: italic;
+}
+
+/* Layout for multiple benchmark tables */
+.benchmark-tables-wrapper {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.benchmark-table-container {
+    flex: 0 1 auto;
+    min-width: 300px;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.benchmark-table-title {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #444;
+    font-weight: 600;
 }
 
 /* Responsive Design */
@@ -1799,5 +1962,73 @@ footer {
 @media (max-width: 450px) {
     .citation-box {
         word-break: break-all;
+    }
+}
+
+/* Lightbox Styles */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+}
+
+.lightbox-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    animation: zoomIn 0.3s;
+}
+
+#lightbox-caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.1rem;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+    z-index: 2001;
+}
+
+.lightbox-close:hover,
+.lightbox-close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
     }
 }

@@ -12,6 +12,14 @@
 </head>
 
 <body>
+    <div class="wip-banner">
+        <div class="wip-content">
+            <span class="wip-icon">⚠️</span>
+            <span class="wip-text"><strong>Work in Progress:</strong> This project page is still under development.
+                Content and features may change.</span>
+        </div>
+    </div>
+
     <header class="header">
         <div class="container">
             <h1>Synthetic Data Enables Human-Grade Microtubule Analysis by Tuning Segmentation Foundation Models</h1>
@@ -21,16 +29,17 @@
                     <a href="mailto:mario.koddenbrock@htw-berlin.de">Mario Koddenbrock</a><sup>*,1</sup>,
                     <a href="mailto:justus.westerhoff@bht-berlin.de">Justus Westerhoff</a><sup>*,2</sup>,
                     <a href="mailto:fachet@mpiib-berlin.mpg.de">Dominik Fachet</a><sup>3</sup>,
-                    <a href="mailto:reber@mpiib-berlin.mpg.de">Simone Reber</a><sup>3</sup>,
+                    <a href="mailto:reber@mpiib-berlin.mpg.de">Simone Reber</a><sup>2,3</sup>,
                     <a href="mailto:felixalexander.gers@bht-berlin.de">Felix Gers</a><sup>2</sup>,
-                    <a href="mailto:erik.rodner@htw-berlin.de">Erik Rodner</a><sup>1</sup>
+                    <a href="mailto:erik.rodner@htw-berlin.de">Erik Rodner</a><sup>1,4</sup>
                 </p>
                 <p class="header-label">Affiliations</p>
                 <p class="affiliations">
                     <sup>1</sup><a href="https://kiwerkstatt.f2.htw-berlin.de/">KI Werkstatt, HTW Berlin</a>,
-                    <sup>2</sup><a href="https://prof.bht-berlin.de/loeser">DATEXIS, BHT Berlin</a>,
+                    <sup>2</sup><a href="https://www.bht-berlin.de/">BHT Berlin</a>,
                     <sup>3</sup><a href="https://www.mpiib-berlin.mpg.de/">Max Planck Institute for Infection
                         Biology</a>
+                    <sup>4</sup><a href="https://www.merantix-momentum.com//">Merantix Momentum</a>,
                 </p>
                 <p class="header-label" style="margin-top: 5px;">* These authors contributed equally</p>
             </div>
@@ -157,102 +166,225 @@
             <div class="benchmark-layout">
                 <div class="benchmark-explanation">
                     <h3>📊 What we measure</h3>
-                    <p><strong>SKIoU</strong> (Skeleton IoU) measures how well predicted segmentations match
+                    <p><strong><a
+                                href="https://openaccess.thecvf.com/content_eccv_2018_workshops/w33/html/Liu_Densely_Connected_Stacked_U-network_for_Filament_Segmentation_in_Microscopy_Images_ECCVW_2018_paper.html"
+                                target="_blank" title="Skeleton IoU metric for filament segmentation">SKIoU</a></strong>
+                        (Skeleton IoU) measures how well predicted segmentations match
                         ground-truth microtubule shapes — the core metric for filament segmentation.</p>
+                    <p><strong>Count</strong> measures the absolute difference in the number of detected filaments
+                        compared to the ground truth (lower is better).</p>
                     <p><strong>Length KL</strong> and <strong>Curvature KL</strong> capture how well the model preserves
-                        biologically meaningful properties. Lower = predictions match real MT distributions better.</p>
+                        biologically meaningful properties. Lower = predictions match ground-truth MT distributions
+                        better.</p>
 
                     <h3>🔬 Key takeaways</h3>
                     <ul>
-                        <li>Most models struggle out-of-the-box (zero-shot)</li>
-                        <li>HPO on just 10 synthetic images helps dramatically</li>
-                        <li><code>SAM3Text</code> + HPO achieves <strong>0.89 SKIoU</strong> — near-perfect!</li>
-                        <li>It also nails downstream metrics (Length KL: 1.01)</li>
+                        <li>Most models struggle out-of-the-box (zero-shot).</li>
+                        <li><strong>HPO on just 10 synthetic images transfers to real data</strong>, significantly
+                            improving model performance there as well.</li>
+                        <li>A notable exception is <code>SAM3Text</code>: After HPO on only ten random
+                            <code>SynthMT</code> images, it achieves near-perfect and in some cases <strong>super-human
+                                performance</strong> on unseen real data.
+                        </li>
+                        <li>This indicates that <strong>fully automated MT segmentation</strong> has become feasible
+                            when model configuration is effectively guided through synthetic data.</li>
                     </ul>
 
                     <p class="benchmark-note">
-                        💡 <em>Full results with all metrics available in the paper.</em>
+                        💡 <em>Full results with all models and metrics available in the paper.</em>
                     </p>
                 </div>
 
-                <div class="benchmark-table-container">
-                    <table class="benchmark-table benchmark-table-compact">
-                        <thead>
-                            <tr>
-                                <th>Model</th>
-                                <th>SKIoU ↑</th>
-                                <th>Length KL ↓</th>
-                                <th>Curvature KL ↓</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="group-header">
-                                <td colspan="4">Baseline</td>
-                            </tr>
-                            <tr>
-                                <td class="model-name"><code>FIESTA</code></td>
-                                <td>0.12</td>
-                                <td>5.03</td>
-                                <td>1.01</td>
-                            </tr>
-                            <tr class="hpo-row">
-                                <td class="model-name"><code>FIESTA</code> + HPO</td>
-                                <td>0.24</td>
-                                <td>3.74</td>
-                                <td>0.71</td>
-                            </tr>
+                <div class="benchmark-tables-wrapper">
+                    <!-- Table 1: Segmentation Performance -->
+                    <div class="benchmark-table-container">
+                        <h4 class="benchmark-table-title"><code>SynthMT</code></h4>
+                        <table class="benchmark-table benchmark-table-compact">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>SKIoU ↑</th>
+                                    <th>Length<br>KL ↓</th>
+                                    <th>Curvature<br>KL ↓</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="group-header">
+                                    <td colspan="4">Baseline</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>FIESTA</code></td>
+                                    <td>0.12</td>
+                                    <td>5.03</td>
+                                    <td>1.00</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>FIESTA</code> + HPO</td>
+                                    <td>0.24</td>
+                                    <td>3.74</td>
+                                    <td>0.71</td>
+                                </tr>
 
-                            <tr class="group-header">
-                                <td colspan="4">Microscopy Foundation Models</td>
-                            </tr>
-                            <tr>
-                                <td class="model-name"><code>TARDIS</code></td>
-                                <td>0.45</td>
-                                <td>0.55</td>
-                                <td class="best-score">0.02</td>
-                            </tr>
-                            <tr>
-                                <td class="model-name"><code>CellSAM</code></td>
-                                <td>0.49</td>
-                                <td>0.19</td>
-                                <td class="best-score">0.02</td>
-                            </tr>
-                            <tr class="hpo-row">
-                                <td class="model-name"><code>Cellpose-SAM</code> + HPO</td>
-                                <td>0.62</td>
-                                <td>0.12</td>
-                                <td class="best-score">0.01</td>
-                            </tr>
+                                <tr class="group-header">
+                                    <td colspan="4">Microscopy Foundation Models</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>TARDIS</code></td>
+                                    <td>0.45</td>
+                                    <td>0.56</td>
+                                    <td>0.02</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>TARDIS</code> + HPO</td>
+                                    <td>0.48</td>
+                                    <td>0.41</td>
+                                    <td>0.03</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>µSAM</code></td>
+                                    <td>0.02</td>
+                                    <td>0.88</td>
+                                    <td>0.13</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>µSAM</code> + HPO</td>
+                                    <td>0.66</td>
+                                    <td>1.24</td>
+                                    <td>0.13</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>CellSAM</code></td>
+                                    <td>0.56</td>
+                                    <td>0.19</td>
+                                    <td>0.02</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>CellSAM</code> + HPO</td>
+                                    <td>0.59</td>
+                                    <td>0.21</td>
+                                    <td>0.03</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>Cellpose-SAM</code></td>
+                                    <td>0.26</td>
+                                    <td>0.12</td>
+                                    <td>0.02</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>Cellpose-SAM</code> + HPO</td>
+                                    <td>0.65</td>
+                                    <td>0.12</td>
+                                    <td class="best-score">0.01</td>
+                                </tr>
 
-                            <tr class="group-header">
-                                <td colspan="4">General Purpose Foundation Models</td>
-                            </tr>
-                            <tr>
-                                <td class="model-name"><code>SAM</code></td>
-                                <td>0.37</td>
-                                <td>3.90</td>
-                                <td>0.73</td>
-                            </tr>
-                            <tr class="hpo-row">
-                                <td class="model-name"><code>SAM2</code> + HPO</td>
-                                <td>0.66</td>
-                                <td>0.04</td>
-                                <td>0.02</td>
-                            </tr>
-                            <tr>
-                                <td class="model-name"><code>SAM3Text</code></td>
-                                <td class="best-score">0.80</td>
-                                <td>0.07</td>
-                                <td>0.06</td>
-                            </tr>
-                            <tr class="hpo-row winner-row">
-                                <td class="model-name"><code>SAM3Text</code> + HPO 🏆</td>
-                                <td class="best-score">0.89</td>
-                                <td class="best-score">0.02</td>
-                                <td>0.07</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <tr class="group-header">
+                                    <td colspan="4">General Purpose Foundation Models</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>SAM</code></td>
+                                    <td>0.37</td>
+                                    <td>3.90</td>
+                                    <td>0.70</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>SAM</code> + HPO</td>
+                                    <td>0.16</td>
+                                    <td>5.45</td>
+                                    <td>0.91</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>SAM3Text</code></td>
+                                    <td>0.85</td>
+                                    <td>0.88</td>
+                                    <td>0.06</td>
+                                </tr>
+                                <tr class="hpo-row winner-row">
+                                    <td class="model-name"><code>SAM3Text</code> + HPO 🏆</td>
+                                    <td class="best-score">0.93</td>
+                                    <td>0.02</td>
+                                    <td>0.07</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Table 2: Downstream Analysis -->
+                    <div class="benchmark-table-container">
+                        <h4 class="benchmark-table-title">Unseen Real Data</h4>
+                        <table class="benchmark-table benchmark-table-compact">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Count ↓</th>
+                                    <th>Length<br>KL ↓</th>
+                                    <th>Curvature<br>KL ↓</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="group-header">
+                                    <td colspan="4">Microscopy Foundation Models</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>CellSAM</code></td>
+                                    <td class="best-score">2.62</td>
+                                    <td>0.17</td>
+                                    <td class="best-score">0.090</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>CellSAM</code> + HPO</td>
+                                    <td>7.18</td>
+                                    <td>1.34</td>
+                                    <td>0.140</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>Cellpose-SAM</code></td>
+                                    <td>11.64</td>
+                                    <td class="best-score">0.11</td>
+                                    <td>0.180</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>Cellpose-SAM</code> + HPO</td>
+                                    <td>10.91</td>
+                                    <td>1.01</td>
+                                    <td class="best-score">0.090</td>
+                                </tr>
+
+                                <tr class="group-header">
+                                    <td colspan="4">General Purpose Foundation Models</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>SAM</code></td>
+                                    <td>4.64</td>
+                                    <td class="best-score">0.11</td>
+                                    <td>0.160</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>SAM</code> + HPO</td>
+                                    <td>84.35</td>
+                                    <td>0.30</td>
+                                    <td>0.151</td>
+                                </tr>
+                                <tr>
+                                    <td class="model-name"><code>SAM3Text</code></td>
+                                    <td>8.92</td>
+                                    <td>0.26</td>
+                                    <td>0.250</td>
+                                </tr>
+                                <tr class="hpo-row">
+                                    <td class="model-name"><code>SAM3Text</code> + HPO</td>
+                                    <td class="best-score">1.17</td>
+                                    <td>0.30</td>
+                                    <td>0.140</td>
+                                </tr>
+                                <tr class="inter-annotator-row">
+                                    <td>Inter-annotator</td>
+                                    <td>1.47</td>
+                                    <td>0.51</td>
+                                    <td>0.11</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -393,53 +525,7 @@
         </div>
     </section>
 
-    <section class="results">
-        <div class="container">
-            <h2>Results</h2>
-            <div class="result-section">
-                <h3>Impact on Vision-Language Models</h3>
-                <div class="result-figure">
-                    <img src="images/all_evals_together.svg" alt="VLM Results" style="max-height: 250px;">
-                </div>
-                <p>Accuracy distribution of 99 VLMs across NoSCAM, SCAM, and SynthSCAM datasets. VLMs experience an
-                    average accuracy drop of 26% when evaluated on the SCAM dataset, with an even steeper decline of 35%
-                    on SynthSCAM.</p>
-            </div>
 
-            <div class="result-section">
-                <h3>Impact on Large Vision-Language Models and Dependence on Prompt</h3>
-                <div class="result-figure">
-                    <img src="images/lvlm_prompt_evals.svg" alt="LVLM Results" style="max-height: 550px;">
-                </div>
-                <p>Smaller LLaVA models suffer substantial accuracy drops of 30-50%, while models with larger LLM
-                    backbones exhibit better performance under attack.
-                    Further, we evaluate whether prompting LVLMs to ignore the attack and focus on the object improves
-                    robustness. While we cannot rule out the existence of an effective prompt, our results suggest it is
-                    not effective.</p>
-            </div>
-
-            <div class="result-section">
-                <h3>Impact of Model Parameters</h3>
-                <div class="result-figure">
-                    <img src="images/model_mparams_vs_lost_to_attack.svg" alt="Model Parameters vs Performance Drop"
-                        style="max-height: 250px;">
-                </div>
-                <p>Susceptibility to typographic attack is agnostic of VLMs size, measured in millions of parameters.
-                    While model size alone does not correlate with robustness, larger LLM backbones in LVLMs help
-                    mitigate vulnerability to typographic attacks.</p>
-            </div>
-
-            <div class="result-section">
-                <h3>Impact of Attack Size</h3>
-                <div class="result-figure">
-                    <img src="images/postit_size_vs_object_win_ratio.svg" alt="Post-it Size vs Object Win Ratio"
-                        style="max-height: 300px;">
-                </div>
-                <p>Model accuracy decreases as the post-it area increases. The size of the attack text correlates with
-                    model accuracy, with larger post-it notes causing greater performance degradation.</p>
-            </div>
-        </div>
-    </section>
 
     <section class="key-findings">
         <div class="container">
@@ -608,6 +694,11 @@
         </div>
     </footer>
 
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div id="lightbox-caption"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 
