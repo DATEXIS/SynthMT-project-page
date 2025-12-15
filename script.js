@@ -321,7 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const thumbSrc = `images/${state.selectedImage.type}/${folderName}/thumbnails/${filename}`;
 
             const labelText = hpoEnabled ? `${model.name} + HPO` : model.name;
-            const key = `${model.folder}-${hpoEnabled ? 'hpo' : 'nohpo'}`;
+            // Include filename in key to force re-render when image changes (fixes caching/stale image issues)
+            const key = `${model.folder}-${hpoEnabled ? 'hpo' : 'nohpo'}-${filename}`;
             desiredItems.push({ model, hpoEnabled, fullSrc, thumbSrc, labelText, key });
         });
 
