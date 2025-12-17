@@ -688,6 +688,10 @@ footer {
     background-color: var(--background);
 }
 
+.interactive-benchmark .container {
+    max-width: 1300px;
+}
+
 .benchmark-interface {
     display: flex;
     flex-wrap: wrap;

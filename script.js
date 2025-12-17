@@ -348,20 +348,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Now update/add items in order
         let previousElement = null;
+        const useFullRes = selectedModelsInOrder.length <= 2;
 
         desiredItems.forEach(({ model, hpoEnabled, fullSrc, thumbSrc, labelText, key }) => {
             let item = currentItemsByKey.get(key);
+            const targetSrc = useFullRes ? fullSrc : thumbSrc;
 
             if (item) {
-                // Item exists - update the image src if needed (for image change)
+                // Item exists - update the image src if needed (for image change or count change)
                 const img = item.querySelector('img');
 
-                // Check if we need to update the image (if the underlying model/image changed)
-                if (img.dataset.thumbSrc !== thumbSrc) {
-                    img.src = thumbSrc;
+                // Check if we need to update the image
+                // We update if the underlying source changed OR if we switched between thumb/full mode
+                // Note: img.src might be the full URL, so we compare with dataset or endsWith
+                const currentSrc = img.getAttribute('src'); // Get the raw attribute value
+
+                if (currentSrc !== targetSrc) {
+                    img.src = targetSrc;
                     img.dataset.thumbSrc = thumbSrc;
                     img.dataset.fullSrc = fullSrc;
-                    img.dataset.loaded = 'false'; // Reset loaded state
+                    img.dataset.loaded = useFullRes ? 'true' : 'false';
                 }
 
                 // Update label if needed
@@ -369,9 +375,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (label.textContent !== labelText) {
                     label.textContent = labelText;
                 }
-
-                // Update click handler (Removed as per request)
-                // img.onclick = () => openLightbox(fullSrc, labelText);
             } else {
                 // Create new item
                 item = document.createElement('div');
@@ -379,14 +382,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.dataset.key = key;
 
                 const img = document.createElement('img');
-                img.src = thumbSrc;
+                img.src = targetSrc;
                 img.dataset.thumbSrc = thumbSrc;
                 img.dataset.fullSrc = fullSrc;
-                img.dataset.loaded = 'false';
+                img.dataset.loaded = useFullRes ? 'true' : 'false';
                 img.alt = `${model.name} result`;
                 img.loading = 'lazy';
 
-                // Hover: Load full res
+                // Hover: Load full res (only if not already loaded)
                 img.addEventListener('mouseenter', () => {
                     if (img.dataset.loaded === 'false') {
                         const highRes = new Image();
@@ -397,9 +400,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         highRes.src = img.dataset.fullSrc;
                     }
                 });
-
-                // Click: Open Lightbox (Removed as per request)
-                // img.onclick = () => openLightbox(fullSrc, labelText);
 
                 const label = document.createElement('span');
                 label.textContent = labelText;
