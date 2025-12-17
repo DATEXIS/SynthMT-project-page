@@ -1,4 +1,4 @@
-# SynthMT: Synthetic Data Enables Human-Grade Microtubule Analysis by Tuning Segmentation Foundation Models
+# SynthMT: Synthetic Data Enables Human-Grade Microtubule Analysis with Foundation Models for Segmentation
 
 [Code](https://github.com/ml-lab-htw/SynthMT) - [Dataset](https://huggingface.co/datasets/HTW-KI-Werkstatt/SynthMT) - [Preprint (TBA)](https://www.biorxiv.org/)
 
