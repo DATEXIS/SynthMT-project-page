@@ -354,6 +354,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let item = currentItemsByKey.get(key);
             const targetSrc = useFullRes ? fullSrc : thumbSrc;
 
+            // Construct GIF path: replace extension with _buildup.gif
+            // e.g. images/real/SAM3Text/real_5.webp -> images/real/SAM3Text/real_5_buildup.gif
+            const gifSrc = fullSrc.replace(/\.[^/.]+$/, "_buildup.gif");
+
             if (item) {
                 // Item exists - update the image src if needed (for image change or count change)
                 const img = item.querySelector('img');
@@ -367,7 +371,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     img.src = targetSrc;
                     img.dataset.thumbSrc = thumbSrc;
                     img.dataset.fullSrc = fullSrc;
+                    img.dataset.gifSrc = gifSrc;
                     img.dataset.loaded = useFullRes ? 'true' : 'false';
+                } else {
+                    // Ensure gifSrc is updated even if src didn't change (e.g. same image different model?)
+                    // Actually key includes model so this is a new item usually.
+                    // But if we just switch HPO, key changes.
+                    // If we switch image, key changes.
+                    // So this block is mostly for when we switch between thumb/full mode without changing key?
+                    // No, key includes filename.
+                    // Wait, if we add/remove models, the count changes, so useFullRes changes.
+                    // The key stays the same for existing items.
+                    // So we need to update gifSrc just in case?
+                    // Actually gifSrc depends on fullSrc which depends on filename and model.
+                    // If key is same, filename and model are same. So gifSrc is same.
+                    // So we only need to update if we are updating the image src.
+                    // But let's be safe and update dataset always if we are here.
+                    img.dataset.gifSrc = gifSrc;
                 }
 
                 // Update label if needed
@@ -375,6 +395,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (label.textContent !== labelText) {
                     label.textContent = labelText;
                 }
+
+                // Update click handler
+                img.onclick = () => openLightbox(gifSrc, labelText);
+
             } else {
                 // Create new item
                 item = document.createElement('div');
@@ -385,6 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.src = targetSrc;
                 img.dataset.thumbSrc = thumbSrc;
                 img.dataset.fullSrc = fullSrc;
+                img.dataset.gifSrc = gifSrc;
                 img.dataset.loaded = useFullRes ? 'true' : 'false';
                 img.alt = `${model.name} result`;
                 img.loading = 'lazy';
@@ -401,15 +426,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
+                // Click: Open Lightbox with GIF
+                img.onclick = () => openLightbox(gifSrc, labelText);
+
                 const label = document.createElement('span');
                 label.textContent = labelText;
 
                 item.appendChild(img);
                 item.appendChild(label);
                 currentItemsByKey.set(key, item);
-            }
-
-            // Ensure correct order: insert after previousElement (or at start)
+            }            // Ensure correct order: insert after previousElement (or at start)
             if (previousElement) {
                 if (item.previousElementSibling !== previousElement) {
                     previousElement.after(item);
