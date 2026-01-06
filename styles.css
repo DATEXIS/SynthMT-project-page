@@ -1503,13 +1503,21 @@ footer {
 
 /* Inter-annotator row style */
 .benchmark-table .inter-annotator-row td {
+    background-color: #f5f1e8;
+    /* Orange */
+    color: #a96a27;
+    font-weight: 500;
+}
+
+/* Ground Truth row style */
+.benchmark-table .ground-truth-row td {
     background-color: #e8f5e9;
     /* Light green */
     color: #2e7d32;
     font-weight: 500;
 }
 
-.benchmark-table .inter-annotator-row td:first-child {
+.benchmark-table .inter-annotator-row .ground-truth-row td:first-child {
     font-style: italic;
 }
 
