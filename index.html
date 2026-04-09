@@ -15,13 +15,6 @@
 </head>
 
 <body>
-    <div class="wip-banner">
-        <div class="wip-content">
-            <span class="wip-icon">⚠️</span>
-            <span class="wip-text"><strong>Work in Progress:</strong> This project page is still under development and
-                the paper is currently under review. Content and features may change.</span>
-        </div>
-    </div>
 
     <header class="header">
         <div class="container">
@@ -59,7 +52,7 @@
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
                     </svg>
-                    Preprint (bioRxiv)
+                    Preprint
                 </a>
                 <a href="https://github.com/ml-lab-htw/SynthMT" class="button" target="_blank"
                     rel="noopener noreferrer">
@@ -70,7 +63,7 @@
                             d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
                         </path>
                     </svg>
-                    Code (GitHub)
+                    Code
                 </a>
                 <a href="https://huggingface.co/datasets/HTW-KI-Werkstatt/SynthMT" class="button" target="_blank"
                     rel="noopener noreferrer">
@@ -81,9 +74,10 @@
                         <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
                         <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
                     </svg>
-                    SynthMT (Hugging Face)
+                    SynthMT
                 </a>
-                <a href="https://huggingface.co/datasets/HTW-KI-Werkstatt/IRM-in-vitro-microtubules" class="button" target="_blank" rel="noopener noreferrer">
+                <a href="https://huggingface.co/datasets/HTW-KI-Werkstatt/IRM-in-vitro-microtubules" class="button"
+                    target="_blank" rel="noopener noreferrer">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         style="vertical-align: text-bottom; margin-right: 5px;">
@@ -91,7 +85,15 @@
                         <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
                         <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
                     </svg>
-                    Real Data (Hugging Face)
+                    Real Data
+                </a>
+                <a href="#" class="button plos-accepted-button" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="vertical-align: text-bottom; margin-right: 5px;">
+                        <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Accepted at PLOS Computational Biology
                 </a>
             </div>
         </div>
@@ -99,7 +101,7 @@
 
     <section class="interactive-benchmark">
         <div class="container">
-            <p style="text-align: center; margin-bottom: 2rem; font-style: italic;">
+            <p style="text-align: center; margin-top: 0; margin-bottom: 2rem; font-style: italic;">
                 We introduce the SynthMT dataset to study the readiness of automated microtubule analysis with
                 state-of-the-art foundation models.
             </p>
@@ -130,10 +132,10 @@
                     <h3>Select Models</h3>
                     <div class="model-columns-wrapper">
                         <div class="model-list" id="model-list-left">
-                            <!-- Baseline + Microscopy models - Populated by JS -->
+                            <!-- Traditional, Domain-Specific, and SAM-based models - Populated by JS -->
                         </div>
                         <div class="model-list" id="model-list-right">
-                            <!-- General Purpose models - Populated by JS -->
+                            <!-- Foundation models - Populated by JS -->
                         </div>
                     </div>
                     <div class="hpo-disclaimer">
@@ -165,23 +167,20 @@
             <h2>Abstract</h2>
             <p>
                 Studying microtubules (MTs) and their mechanical properties is central to understanding intracellular
-                transport, cell division, and drug action, yet experts still spend many hours manually segmenting these
-                filamentous structures.
-                The suitability of state-of-the-art models for this task cannot be orderly assessed, as large-scale
-                labeled datasets are missing.
-                We address this gap by presenting the synthetic dataset <code>SynthMT</code>, which is the product of
-                tuning a novel
-                image generation pipeline on unlabeled, real-world interference reflection microscopy (IRM) frames of
-                <i>in vitro</i> reconstituted microtubules.
-                In our benchmark, we systematically test nine models in both zero- and Hyperparameter Optimization
-                (HPO)-bbased few-shot settings.
-                Across both, classical and current foundation models still struggle to achieve the accuracy required for
-                biological downstream analysis on, to humans, visually simple <i>in vitro</i> MT IRM images.
-                However, a notable exception is the recently introduced <code>SAM3</code> model.
-                After HPO on only ten random <code>SynthMT</code> images, its text-prompt version <code>SAM3Text</code>
-                achieves near-perfect and in some cases super-human performance on unseen real data.
-                This result indicates that fully automated MT segmentation has become feasible when model
-                configuration is effectively guided through synthetic data.
+                transport, cell division, and drug action. While important, experts still need to spend many hours
+                manually segmenting these filamentous structures. The suitability of state-of-the-art methods for this
+                task cannot be systematically assessed, as large-scale labeled datasets are missing. We address this
+                gap by introducing the synthetic dataset <code>SynthMT</code>, produced by tuning a novel image
+                generation pipeline on real-world interference reflection microscopy (IRM) frames of <i>in vitro</i>
+                reconstituted MTs without requiring human annotations. In our benchmark, we evaluate nine fully
+                automated methods for MT analysis in both zero- and Hyperparameter Optimization (HPO)-based few-shot
+                settings. Across both settings, classical algorithms and current foundation models still struggle to
+                achieve the accuracy required for biological downstream analysis on <i>in vitro</i> MT IRM images that
+                humans perceive as visually simple. However, a notable exception is the recently introduced
+                <code>SAM3</code> model. After HPO on only ten random <code>SynthMT</code> images, its text-prompted
+                version <code>SAM3Text</code> achieves near-perfect and in some cases super-human performance on unseen,
+                real data. This indicates that fully automated MT segmentation has become feasible when method
+                configuration is effectively guided by synthetic data.
             </p>
         </div>
     </section>
@@ -261,7 +260,7 @@
                             </thead>
                             <tbody>
                                 <tr class="group-header">
-                                    <td colspan="4">Baseline</td>
+                                    <td colspan="4">Traditional Baselines</td>
                                 </tr>
                                 <tr>
                                     <td class="model-name"><code>FIESTA</code></td>
@@ -276,7 +275,7 @@
                                     <td>0.706</td>
                                 </tr>
                                 <tr class="group-header">
-                                    <td colspan="4">Microscopy Foundation Models</td>
+                                    <td colspan="4">Pretrained Domain-Specific Models</td>
                                 </tr>
                                 <tr>
                                     <td class="model-name"><code>TARDIS</code></td>
@@ -289,6 +288,9 @@
                                     <td>0.48</td>
                                     <td>0.41</td>
                                     <td>0.031</td>
+                                </tr>
+                                <tr class="group-header">
+                                    <td colspan="4">SAM-based Models</td>
                                 </tr>
                                 <tr>
                                     <td class="model-name"><code>µSAM</code></td>
@@ -328,7 +330,7 @@
                                 </tr>
 
                                 <tr class="group-header">
-                                    <td colspan="4">General Purpose Foundation Models</td>
+                                    <td colspan="4">Foundation Models</td>
                                 </tr>
                                 <tr>
                                     <td class="model-name"><code>SAM</code></td>
@@ -372,7 +374,7 @@
                             </thead>
                             <tbody>
                                 <tr class="group-header">
-                                    <td colspan="4">Microscopy Foundation Models</td>
+                                    <td colspan="4">SAM-based Models</td>
                                 </tr>
                                 <tr>
                                     <td class="model-name"><code>CellSAM</code></td>
@@ -400,7 +402,7 @@
                                 </tr>
 
                                 <tr class="group-header">
-                                    <td colspan="4">General Purpose Foundation Models</td>
+                                    <td colspan="4">Foundation Models</td>
                                 </tr>
                                 <tr>
                                     <td class="model-name"><code>SAM</code></td>
@@ -666,7 +668,8 @@
                         </svg>
                     </div>
                     <h3>SynthMT Dataset</h3>
-                    <a href="https://huggingface.co/datasets/HTW-KI-Werkstatt/SynthMT" class="button" target="_blank" rel="noopener noreferrer">Hugging Face</a>
+                    <a href="https://huggingface.co/datasets/HTW-KI-Werkstatt/SynthMT" class="button" target="_blank"
+                        rel="noopener noreferrer">Hugging Face</a>
                 </div>
                 <div class="resource">
                     <div class="icon">
@@ -678,7 +681,8 @@
                         </svg>
                     </div>
                     <h3>Real IRM Data</h3>
-                    <a href="https://huggingface.co/datasets/HTW-KI-Werkstatt/IRM-in-vitro-microtubules" class="button" target="_blank" rel="noopener noreferrer">Hugging Face</a>
+                    <a href="https://huggingface.co/datasets/HTW-KI-Werkstatt/IRM-in-vitro-microtubules" class="button"
+                        target="_blank" rel="noopener noreferrer">Hugging Face</a>
                 </div>
             </div>
         </div>
@@ -750,7 +754,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 SynthMT</p>
+            <p>&copy; 2026 SynthMT | Mario Koddenbrock and Justus Westerhoff</p>
         </div>
     </footer>
 

@@ -42,40 +42,6 @@ body {
     background-color: var(--background);
 }
 
-/* Work in Progress Banner */
-.wip-banner {
-    background: linear-gradient(135deg, #fff3cd 0%, #ffe8a0 100%);
-    border-bottom: 3px solid #ff9800;
-    padding: 16px 0;
-    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.15);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.wip-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    max-width: 1500px;
-    margin: 0 auto;
-    width: 95%;
-    padding: 0 20px;
-}
-
-.wip-icon {
-    font-size: 20px;
-    flex-shrink: 0;
-}
-
-.wip-text {
-    font-size: 14px;
-    color: #856404;
-    text-align: center;
-    font-weight: 500;
-}
-
 .container {
     width: 95%;
     max-width: 1800px;
@@ -193,10 +159,19 @@ img {
     background-color: #27ae38;
 }
 
+.plos-accepted-button {
+    background: linear-gradient(135deg, #34b86f 0%, #6d4dd3 100%);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.plos-accepted-button:hover {
+    background: linear-gradient(135deg, #2fa564 0%, #6246bd 100%);
+}
+
 /* Header */
 .header {
     background-color: var(--background-alt);
-    padding: 50px 0;
+    padding: 15px 0 50px 0;
     text-align: center;
 }
 
@@ -247,7 +222,7 @@ img {
 .methodology,
 .key-findings,
 .citation {
-    padding: 50px 0;
+    padding: 30px 0 50px 0;
     background-color: var(--background-alt);
 }
 
@@ -277,7 +252,7 @@ img {
 
 /* Pipeline Section */
 .pipeline {
-    padding: 50px 0;
+    padding: 30px 0 50px 0;
     background-color: var(--background);
 }
 
@@ -684,12 +659,20 @@ footer {
 /* Interactive Examples Section */
 /* Interactive Benchmark Section */
 .interactive-benchmark {
-    padding: 20px 0 20px 0;
+    padding: 4px 0 20px 0;
     background-color: var(--background);
 }
 
 .interactive-benchmark .container {
     max-width: 1300px;
+}
+
+.interactive-benchmark .container,
+.abstract .container,
+.benchmark .container,
+.pipeline .container,
+.citation .container {
+    padding-top: 5px;
 }
 
 .benchmark-interface {
@@ -1803,7 +1786,7 @@ footer {
 
     /* Section padding */
     .interactive-benchmark {
-        padding: 15px 0 30px 0;
+        padding: 0px 0 30px 0;
     }
 }
 
@@ -2055,6 +2038,6 @@ footer {
 
 /* Benchmark Section */
 .benchmark {
-    padding: 50px 0;
+    padding: 20px 0 50px 0;
     background-color: var(--background-alt);
 }

@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Configuration - grouped by category
     const modelGroups = [
         {
-            name: "Baseline",
+            name: "Traditional Baselines",
             models: [
                 {
                     name: "FIESTA",
@@ -10,26 +10,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     description: "Tracking Single Particles and Elongated Filaments with Nanometer Precision",
                     paper: "https://www.cell.com/biophysj/fulltext/S0006-3495(11)00467-X",
                     github: "https://github.com/fiesta-tud/FIESTA"
-                }
-            ]
-        },
-        {
-            name: "Foundation Models for Microscopy",
-            models: [
+                },
                 {
                     name: "StarDist",
                     folder: "StarDist",
                     description: "Cell Detection with Star-Convex Polygons",
                     paper: "https://link.springer.com/chapter/10.1007/978-3-030-00934-2_30",
                     github: "https://github.com/stardist/stardist"
-                },
+                }
+            ]
+        },
+        {
+            name: "Pretrained Domain-Specific Models",
+            models: [
                 {
                     name: "TARDIS",
                     folder: "tardis_mt_tirf",
                     description: "Accurate and fast segmentation of filaments and membranes in micrographs and tomograms with TARDIS",
                     paper: "https://www.biorxiv.org/content/10.1101/2024.12.19.629196v2",
                     github: "https://github.com/SMLC-NYSBC/TARDIS"
-                },
+                }
+            ]
+        },
+        {
+            name: "SAM-based Models",
+            models: [
                 {
                     name: "µSAM",
                     folder: "microSAM",
@@ -54,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         {
-            name: "General Purpose Foundation Models",
+            name: "Foundation Models",
             models: [
                 {
                     name: "SAM",
@@ -157,8 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         modelListRight.innerHTML = '';
 
         modelGroups.forEach(group => {
-            // Determine which column: General Purpose goes right, others go left
-            const targetList = group.name === 'General Purpose Foundation Models' ? modelListRight : modelListLeft;
+            // Determine which column: Foundation models go right, others go left
+            const targetList = group.name === 'Foundation Models' ? modelListRight : modelListLeft;
 
             // Add group header
             const groupHeader = document.createElement('div');
