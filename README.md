@@ -1,6 +1,6 @@
 # SynthMT: Synthetic Data Enables Human-Grade Microtubule Analysis with Foundation Models for Segmentation
 
-[Main Repo](https://github.com/ml-lab-htw/SynthMT) - [Dataset](https://huggingface.co/datasets/HTW-KI-Werkstatt/SynthMT) - [Preprint](https://www.biorxiv.org/content/10.64898/2026.01.09.698597v2)
+[Main Repo](https://github.com/ml-lab-htw/SynthMT) - [Dataset](https://huggingface.co/datasets/HTW-KI-Werkstatt/SynthMT) - [Paper](https://huggingface.co/datasets/HTW-KI-Werkstatt/SynthMT)
 
 > Studying microtubules (MTs) and their mechanical properties is central to understanding intracellular transport, cell division, and drug action, yet experts still spend many hours manually segmenting these filamentous structures.
 > The suitability of state-of-the-art models for this task cannot be orderly assessed, as large-scale labeled datasets are missing.
